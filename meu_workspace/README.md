@@ -46,7 +46,7 @@ source install/local_setup.bash
 ros2 run turtlesim turtlesim_node 
 ```
 
-6. Repita os passos 2,3,4 e por fim execute o comando: 
+6. Para rodar o pacote contendo a atividade, é necessário abrir outro terminal do repositório e repetir os passos 2,3,4 e por fim execute o comando: 
 ```bash 
 ros2 run drawing_turtle drawing_turtle
 ```
