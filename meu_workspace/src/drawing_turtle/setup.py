@@ -15,8 +15,8 @@ setup(
     zip_safe=True,
     maintainer='fvasconcellos',
     maintainer_email='fernando.asv@uol.com.br',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='O pacote é responsável por desenhar um escudo do palmeiras através do turtlesim.',
+    license='CC0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts':[
