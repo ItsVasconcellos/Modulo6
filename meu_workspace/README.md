@@ -6,6 +6,10 @@
 
 O pacote drawing_turtle foi uma atividade ponderada realizada com o intuito de utilizar o turtlesim para criar um desenho. Para isso, foram utilizados comandos como: `spawn`,`kill`,`setPen`. O pacote realiza um desenho, o qual se assemelha com o escudo do palmeiras.
 
+### Vídeo demo
+
+[Vídeo demonstração da aplicação!](https://youtu.be/jdG3csXaiEs)
+
 ## Pré-requisitos
 
 - ROS 2
