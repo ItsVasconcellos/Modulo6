@@ -72,7 +72,7 @@ def main(args=None):
                 print("stop")
                 twist.linear.x = 0.0
                 twist.angular.z = 0.0
-                teleop_turtle.publish_velocity(twist)
+                teleop_turtle.publish_velocity(twist, "PARAR IMEDIATO")
             
     rclpy.shutdown()
 if __name__ == '__main__':

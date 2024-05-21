@@ -14,7 +14,6 @@
 
 Caso nao tenha os pré-requisitos listados, recomendo seguir [esse tutorial](https://rmnicola.github.io/m6-ec-encontros/E01/ros) para instalar todas os requisitos.
 
-
 ## Instalação
 
 1. Clone o repositório em sua máquina:
