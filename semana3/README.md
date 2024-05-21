@@ -27,3 +27,24 @@ git clone https://github.com/ItsVasconcellos/Modulo6
 ```bash
 cd semana3
 ```
+
+3. Crie um ambiente virtual
+```bash
+python -m venv venv
+```
+
+4. Baixe os requisitos necessários 
+```bash
+pip install -r requirements.txt
+```
+
+5. Execute o webots (Caso não tenha instalado, siga [esse tutorial](https://rmnicola.github.io/m8-ec-encontros/sprint2/encontro4/nav2/#4-usando-o-simple-commander-api) )
+
+```bash 
+ros2 launch webots_ros2_turtlebot robot_launch.py
+```
+
+6. Por fim, execute o arquivo main.py:
+```bash
+python3 main.py
+```
