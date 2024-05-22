@@ -4,7 +4,7 @@
 
 ### Vídeo demo
 
-[Vídeo demonstração da aplicação!](https://youtu.be/Xu30gFVBYMU)
+[Vídeo demonstração da aplicação!](https://youtu.be/qZqdl7lqa1E)
 
 ## Pré-requisitos
 

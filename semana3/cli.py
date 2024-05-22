@@ -70,7 +70,7 @@ def main():
                 twist.angular.z = 0.0
                 keyboard_telop_node.publish_velocity(twist)
             case "s":
-                print("stop")
+                print("Parada Emergêncial!")
                 twist.linear.x = 0.0
                 twist.angular.z = 0.0
                 keyboard_telop_node.publish_velocity(twist)
