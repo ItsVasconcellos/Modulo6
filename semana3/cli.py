@@ -1,20 +1,21 @@
+
 import sys
 import tty
 import termios
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
+from std_srvs.srv import Trigger
 
+class KeyboardTeleop(Node):
 
-class TeleopTurtle(Node):
     def __init__(self):
         super().__init__('teleop_turtle')
-        self.publisher = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.velocity = self.create_publisher(Twist, "/velocity", 10)
+        self.kill_client = self.create_client(Trigger, "kill_robot_service")
 
-    def publish_velocity(self, twist,direction):
-        print(f"{direction} - Linear Velocity: {twist.linear.x}, Angular Velocity: {twist.angular.z}")
-        self.publisher.publish(twist)
-
+    def publish_velocity(self, twist):
+        self.velocity.publish(twist)
 
 def getch():
     fd = sys.stdin.fileno()
@@ -26,10 +27,7 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-
-def main(args=None):
-    rclpy.init(args=args)
-    teleop_turtle = TeleopTurtle()
+def main():
     print("""
     ### Controle do Robô ###
 
@@ -46,7 +44,10 @@ def main(args=None):
     - D: Vira o robô para a direita.
     - S: Para o robô imediatamente.
     """)
-    while True:
+    rclpy.init()
+    keyboard_telop_node = KeyboardTeleop()
+    while rclpy.ok():
+
         keyPressed = getch()    
         if ord(keyPressed) == 3:
             break
@@ -55,26 +56,40 @@ def main(args=None):
             case "a":
                 twist.linear.x = 0.0
                 twist.angular.z = 1.0
-                teleop_turtle.publish_velocity(twist, "Esquerda")
+                keyboard_telop_node.publish_velocity(twist)
             case "d":
                 twist.linear.x = 0.0
                 twist.angular.z = -1.0
-                teleop_turtle.publish_velocity(twist, "Direita")
+                keyboard_telop_node.publish_velocity(twist)
             case "w":
                 twist.linear.x = -0.2
                 twist.angular.z = 0.0
-                teleop_turtle.publish_velocity(twist, "Frente")
+                keyboard_telop_node.publish_velocity(twist)
             case "x":
                 twist.linear.x = 0.2
                 twist.angular.z = 0.0
-                teleop_turtle.publish_velocity(twist, "Trás")
+                keyboard_telop_node.publish_velocity(twist)
             case "s":
                 print("stop")
                 twist.linear.x = 0.0
                 twist.angular.z = 0.0
-                teleop_turtle.publish_velocity(twist, "PARAR IMEDIATO")
-            
+                keyboard_telop_node.publish_velocity(twist)
+
+    keyboard_telop_node.kill_client.wait_for_service()
+    request = Trigger.Request()
+    future = keyboard_telop_node.kill_client.call_async(request)
+    rclpy.spin_until_future_complete(keyboard_telop_node, future)
+    response = future.result()
+    if response.success:
+        print("Robot killed successfully")
+    else:
+        print("Failed to kill robot")
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    keyboard_telop_node.destroy_node()
     rclpy.shutdown()
+
+
 if __name__ == '__main__':
     settings = termios.tcgetattr(sys.stdin)
     main()
+    

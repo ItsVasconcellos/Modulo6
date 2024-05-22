@@ -4,13 +4,14 @@
 
 ### Vídeo demo
 
-[Vídeo demonstração da aplicação!](https://youtu.be/jdG3csXaiEs)
+[Vídeo demonstração da aplicação!](https://youtu.be/Xu30gFVBYMU)
 
 ## Pré-requisitos
 
 - ROS 2
 - Python 3.8+
 - turtlesim
+- WeBots
 
 Caso nao tenha os pré-requisitos listados, recomendo seguir [esse tutorial](https://rmnicola.github.io/m6-ec-encontros/E01/ros) para instalar todas os requisitos.
 
