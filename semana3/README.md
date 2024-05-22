@@ -44,7 +44,12 @@ pip install -r requirements.txt
 ros2 launch webots_ros2_turtlebot robot_launch.py
 ```
 
-6. Por fim, execute o arquivo main.py:
+6. Execute o script:
 ```bash
-python3 main.py
+./run.sh
+```
+
+7. Por fim, execute o arquivo cli.py
+```bash
+python3 cli.py
 ```

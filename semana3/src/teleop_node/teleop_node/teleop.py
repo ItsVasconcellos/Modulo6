@@ -31,7 +31,7 @@ class TeleopTurtle(Node):
         if self.is_available:
             self.current_velocity = msg
             self.find_direction()
-            self.get_logger().info(f"{self.direction} - Linear Velocity: {self.current_velocity.linear.x }, Angular Velocity: {self.current_velocity.angular.z}")
+            print((f"{self.direction} - Linear Velocity: {self.current_velocity.linear.x }, Angular Velocity: {self.current_velocity.angular.z}"))
             self.publisher.publish(self.current_velocity)
 
     def find_direction(self):
