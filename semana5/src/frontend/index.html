@@ -46,7 +46,7 @@
 
   var velocityTopic = new ROSLIB.Topic({
     ros: ros,
-    name: 'velocity',
+    name: '/velocity',
     messageType: 'geometry_msgs/Twist'
   })
 
@@ -67,11 +67,15 @@
           <div class="column">
             <div class="box">
               <h2 class="title is-4">Controle de Direção</h2>
-              <div class="buttons">
-                <button class="button is-primary" onclick="velocityTopic.publish(directions.up)">Frente</button>
-                <button class="button is-primary" onclick="velocityTopic.publish(directions.left)">Esquerda</button>
-                <button class="button is-primary" onclick="velocityTopic.publish(directions.right)">Direita</button>
-                <button class="button is-primary" onclick="velocityTopic.publish(directions.down)">Trás</button>
+              <div class="is-flex-direction-row	is-justify-content-center">
+                <div class="fixed-grid has-3-cols">
+                  <div class="grid">
+                      <button class="cell is-col-span-1 is-col-from-end-3 button is-primary" onclick="velocityTopic.publish(directions.up)">Frente</button>
+                      <button class="cell is-col-start-1 is-col-span-1 button is-primary" onclick="velocityTopic.publish(directions.left)">Esquerda</button>
+                      <button class="cell is-col-from-end-2 is-col-span-1 button is-primary" onclick="velocityTopic.publish(directions.right)">Direita</button>
+                      <button class="cell is-col-start-2 is-col-span-1 button is-primary" onclick="velocityTopic.publish(directions.down)">Trás</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
