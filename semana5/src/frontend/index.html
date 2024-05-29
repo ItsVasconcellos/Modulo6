@@ -11,8 +11,8 @@
   var directions = {
     left:{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.5}},
     right:{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -0.5}},
-    up:{linear: {x: 0.0, y: 0.0, z: 0.5}, angular: {x: 0.0, y: 0.0, z: 0.0}},
-    down:{linear: {x: 0.0, y: 0.0, z: -0.5}, angular: {x: 0.0, y: 0.0, z: 0.0}},
+    up:{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}},
+    down:{linear: {x: -0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}},
   }
 
   var ros = new ROSLIB.Ros({
@@ -37,11 +37,19 @@
     name : '/video_frames',
     messageType : 'sensor_msgs/CompressedImage'
   });
-
+  var messageTimestamps = { current: [] };
   // Function to handle incoming video frames
   videoTopic.subscribe(function(message) {
     var img = document.getElementById('videoStream');
     img.src = 'data:image/jpeg;base64,' + message.data;
+    messageTimestamps.current.push(Date.now());
+    // Remove timestamps older than one second
+    const oneSecondAgo = Date.now() - 1000;
+    messageTimestamps.current = messageTimestamps.current.filter(timestamp => timestamp >= oneSecondAgo);
+    // Calculate FPS as the number of messages received in the last second
+    var fps = messageTimestamps.current.length;
+    var fpsElement = document.getElementById('fps');
+    fpsElement.innerHTML = 'FPS: ' + fps;
   });
 
   var velocityTopic = new ROSLIB.Topic({
@@ -67,6 +75,8 @@
           <div class="column">
             <div class="box">
               <h2 class="title is-4">Controle de Direção</h2>
+              <div><h2 class="title is-4" id="fps"></h2>
+                <img id="videoStream"></div>
               <div class="is-flex-direction-row	is-justify-content-center">
                 <div class="fixed-grid has-3-cols">
                   <div class="grid">
