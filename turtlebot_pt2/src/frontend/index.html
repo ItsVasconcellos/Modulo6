@@ -1,98 +1,170 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8" />
+  <head>
+    <meta charset="utf-8" />
 
-<!-- ROS libraries -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/eventemitter2@6.4.9/lib/eventemitter2.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
+    <!-- ROS libraries -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/eventemitter2@6.4.9/lib/eventemitter2.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"
+    ></script>
 
-<script type="text/javascript">
-  var directions = {
-    left:{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.5}},
-    right:{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -0.5}},
-    up:{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}},
-    down:{linear: {x: -0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}},
-  }
+    <script type="text/javascript">
+      var directions = {
+        left: {
+          linear: { x: 0.0, y: 0.0, z: 0.0 },
+          angular: { x: 0.0, y: 0.0, z: 0.5 },
+        },
+        right: {
+          linear: { x: 0.0, y: 0.0, z: 0.0 },
+          angular: { x: 0.0, y: 0.0, z: -0.5 },
+        },
+        up: {
+          linear: { x: 0.5, y: 0.0, z: 0.0 },
+          angular: { x: 0.0, y: 0.0, z: 0.0 },
+        },
+        down: {
+          linear: { x: -0.5, y: 0.0, z: 0.0 },
+          angular: { x: 0.0, y: 0.0, z: 0.0 },
+        },
+      };
 
-  var ros = new ROSLIB.Ros({
-    url : 'ws://localhost:9090'
-  });
+      var ros = new ROSLIB.Ros({
+        url: "ws://localhost:9090",
+      });
 
-  ros.on('connection', function() {
-    console.log('Connected to websocket server.');
-  });
+      ros.on("connection", function () {
+        console.log("Connected to websocket server.");
+      });
 
-  ros.on('error', function(error) {
-    console.log('Error connecting to websocket server: ', error);
-  });
+      ros.on("error", function (error) {
+        console.log("Error connecting to websocket server: ", error);
+      });
 
-  ros.on('close', function() {
-    console.log('Connection to websocket server closed.');
-  });
+      ros.on("close", function () {
+        console.log("Connection to websocket server closed.");
+      });
 
-  // Topic to receive video frames
-  var videoTopic = new ROSLIB.Topic({
-    ros : ros,
-    name : '/video_frames',
-    messageType : 'sensor_msgs/CompressedImage'
-  });
-  var messageTimestamps = { current: [] };
-  // Function to handle incoming video frames
-  videoTopic.subscribe(function(message) {
-    var img = document.getElementById('videoStream');
-    img.src = 'data:image/jpeg;base64,' + message.data;
-    messageTimestamps.current.push(Date.now());
-    // Remove timestamps older than one second
-    const oneSecondAgo = Date.now() - 1000;
-    messageTimestamps.current = messageTimestamps.current.filter(timestamp => timestamp >= oneSecondAgo);
-    // Calculate FPS as the number of messages received in the last second
-    var fps = messageTimestamps.current.length;
-    var fpsElement = document.getElementById('fps');
-    fpsElement.innerHTML = 'FPS: ' + fps;
-  });
+      // Topic to receive video frames
+      var videoTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: "/video_frames",
+        messageType: "sensor_msgs/CompressedImage",
+      });
 
-  var velocityTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/velocity',
-    messageType: 'geometry_msgs/Twist'
-  })
+      var messageTimestamps = { current: [] };
 
-    velocityTopic.publish();
+      // Function to handle incoming video frames
+      videoTopic.subscribe(function (message) {
+        var img = document.getElementById("videoStream");
+        img.src = "data:image/jpeg;base64," + message.data;
+        messageTimestamps.current.push(Date.now());
+        // Remove timestamps older than one second
+        const oneSecondAgo = Date.now() - 1000;
+        messageTimestamps.current = messageTimestamps.current.filter(
+          (timestamp) => timestamp >= oneSecondAgo
+        );
+        // Calculate FPS as the number of messages received in the last second
+        var fps = messageTimestamps.current.length;
+        var fpsElement = document.getElementById("fps");
+        fpsElement.innerHTML = "FPS: " + fps;
+      });
 
-  window.onload = function() {
-    // Subscribe to video frames once
-    videoTopic.subscribe();
-  };
+      var velocityTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: "/velocity",
+        messageType: "geometry_msgs/Twist",
+      });
 
-</script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
-</head>
-<body>
+      velocityTopic.publish();
+
+      var killRobotService = new ROSLIB.Service({
+        ros: ros,
+        name: "/kill_robot",
+        serviceType: "std_srvs/Trigger",
+      });
+
+      window.onload = function () {
+        videoTopic.subscribe();
+      };
+      function funcao() {
+        var request = new ROSLIB.ServiceRequest({});
+
+        killRobotService.callService(request, function (result) {
+          console.log(
+            "Result for service call on " +
+              killRobotService.name +
+              ": " +
+              result.message
+          );
+          if (result.success) {
+            alert("Robot killed successfully");
+          } else {
+            alert("Failed to kill the robot");
+          }
+        });
+      }
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
+    />
+  </head>
+  <body>
     <div class="container">
-        <h1 class="title">Controle de Robô</h1>
-        <div class="columns">
-          <div class="column">
-            <div class="box">
-              <h2 class="title is-4">Controle de Direção</h2>
-              <div><h2 class="title is-4" id="fps"></h2>
-                <img id="videoStream"></div>
-              <div class="is-flex-direction-row	is-justify-content-center">
-                <div class="fixed-grid has-3-cols">
-                  <div class="grid">
-                      <button class="cell is-col-span-1 is-col-from-end-3 button is-primary is-large" onclick="velocityTopic.publish(directions.up)">Frente</button>
-                      <button class="cell is-col-start-1 is-col-span-1 button is-primary is-large" onclick="velocityTopic.publish(directions.left)">Esquerda</button>
-                      <button class="cell is-col-from-end-2 is-col-span-1 button is-primary is-large" onclick="velocityTopic.publish(directions.right)">Direita</button>
-                      <button class="cell is-col-start-2 is-col-span-1 button is-primary is-large" onclick="velocityTopic.publish(directions.down)">Trás</button>
-                  </div>
+      <h1 class="title">Controle de Robô</h1>
+      <div class="columns">
+        <div class="column">
+          <div class="box">
+            <h2 class="title is-4">Controle de Direção</h2>
+            <div>
+              <h2 class="title is-4" id="fps"></h2>
+              <img id="videoStream" />
+            </div>
+            <div class="is-flex-direction-row is-justify-content-center">
+              <div class="fixed-grid has-3-cols">
+                <div class="grid">
+                  <button
+                    class="cell is-col-span-1 is-col-from-end-3 button is-primary is-large"
+                    onclick="velocityTopic.publish(directions.up)"
+                  >
+                    Frente
+                  </button>
+                  <button
+                    class="cell is-col-start-1 is-col-span-1 button is-primary is-large"
+                    onclick="velocityTopic.publish(directions.left)"
+                  >
+                    Esquerda
+                  </button>
+                  <button
+                    class="cell is-col-from-end-2 is-col-span-1 button is-primary is-large"
+                    onclick="velocityTopic.publish(directions.right)"
+                  >
+                    Direita
+                  </button>
+                  <button
+                    class="cell is-col-start-2 is-col-span-1 button is-primary is-large"
+                    onclick="velocityTopic.publish(directions.down)"
+                  >
+                    Trás
+                  </button>
                 </div>
-                <div class="is-flex is-flex-direction-row	is-justify-content-center">
-                  <button class="button is-danger is-medium">Kill</button>
-                </div>
+              </div>
+              <div
+                class="is-flex is-flex-direction-row is-justify-content-center"
+              >
+                <button class="button is-danger is-medium" onclick="funcao()">
+                  Kill
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-</body>
+    </div>
+  </body>
 </html>
