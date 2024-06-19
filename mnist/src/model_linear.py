@@ -19,10 +19,8 @@ x_treino_norm = x_treino/x_treino.max()
 x_teste_norm = x_teste/x_teste.max()
 
 # Reshape dos dados de entrada para adicionar o canal de cor
-x_treino = x_treino.reshape(len(x_treino), 28, 28, 1)
-x_treino_norm = x_treino_norm.reshape(len(x_treino_norm), 28, 28, 1)
-x_teste = x_teste.reshape(len(x_teste), 28, 28, 1)
-x_teste_norm = x_teste_norm.reshape(len(x_teste_norm), 28, 28, 1)
+x_treino_flat = x_treino.reshape(len(x_treino), 28*28)
+x_teste_flat = x_teste.reshape(len(x_teste), 28*28)
 
 
 # Criação do modelo LeNet5
@@ -41,6 +39,6 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'], optimizer=adam)
 
 # Realiza o treinamento do modelo
-historico = model.fit(x_treino_norm, y_treino_cat, epochs=15, validation_split=0.2)
+historico = model.fit(x_treino_flat, y_treino_cat, epochs=15,validation_split=0.2)
 
 model.save('models/modelo_mnist_linear.h5')
