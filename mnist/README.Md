@@ -21,7 +21,7 @@ O conjunto de dados MNIST é composto por imagens de dígitos escritos à mão, 
 
 ## Demonstração
 
-
+https://youtu.be/YQ0OVXnX7xM
 
 ## Rotas 
 

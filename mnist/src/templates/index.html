@@ -14,19 +14,19 @@
     <div class="container">
       <form method="POST" action="/predict" enctype="multipart/form-data">
         <div class="field">
-          <label class="label" for="image">Select Image:</label>
+          <label class="label" for="image">Selecione a imagem:</label>
           <div class="control">
             <input class="input" type="file" id="image" name="image" required>
           </div>
           <p class="help">Supported image formats: JPG, JPEG, PNG</p>
         </div>
 
-        <button type="submit" class="button is-primary">Predict Digit</button>
+        <button type="submit" class="button is-primary">Prever Digito</button>
       </form>
 
       {% if prediction %}
         <div id="prediction" class="is-centered has-text-success">
-          <h4>Predicted Digit: {{ prediction }}</h4>
+          <h4>Digito Previsto: {{ prediction }}</h4>
         </div>
       {% else %}
         <div id="prediction" class="is-centered">
@@ -39,7 +39,7 @@
 <div class="container">
   <form method="POST" action="/predict-linear" enctype="multipart/form-data">
     <div class="field">
-      <label class="label" for="image">Select Image:</label>
+      <label class="label" for="image">Selecione a imagem:</label>
     <div class="control">
       <input class="input" type="file" id="image" name="image" required>
     </div>
