@@ -48,6 +48,6 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'], optimizer=adam)
 
 # Realiza o treinamento do modelo
-historico = model.fit(x_treino_norm, y_treino_cat, epochs=5, validation_split=0.2)
+historico = model.fit(x_treino_norm, y_treino_cat, epochs=15, validation_split=0.2)
 
-model.save('modelo_mnist.h5')
+model.save('models/modelo_mnist.h5')

@@ -1,35 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guess the Number</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MNIST Digit Classifier</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
 </head>
-<body>
-    <div class="file has-name is-boxed">
-        <label class="file-label">
-          <input class="file-input" type="file" name="resume" />
-          <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-upload"></i>
-            </span>
-            <span class="file-label"> Choose a file… </span>
-          </span>
-          <span class="file-name"> Screen Shot 2017-07-29 at 15.54.25.png </span>
-        </label>
+
+<body class="is-flex is-justify-content-center">
+  <section class="section ">
+    <h1 class="title">Prever com CNN</h1>
+    <div class="container">
+      <form method="POST" action="/predict" enctype="multipart/form-data">
+        <div class="field">
+          <label class="label" for="image">Select Image:</label>
+          <div class="control">
+            <input class="input" type="file" id="image" name="image" required>
+          </div>
+          <p class="help">Supported image formats: JPG, JPEG, PNG</p>
+        </div>
+
+        <button type="submit" class="button is-primary">Predict Digit</button>
+      </form>
+
+      {% if prediction %}
+        <div id="prediction" class="is-centered has-text-success">
+          <h4>Predicted Digit: {{ prediction }}</h4>
+        </div>
+      {% else %}
+        <div id="prediction" class="is-centered">
+          <p>Nen</p>
+        </div>
+      {% endif %}
     </div>
-    <div class="field is-grouped is-grouped-centered">
-        <p class="control">
-          <button class="button is-primary">
-            Submit
-          </button>
-        </p>
-        <p class="control">
-          <a class="button is-light">
-            Cancel
-          </a>
-        </p>
-    </div>  
+  <h1 class="title">Prever com Linear</h1>
+
+<div class="container">
+  <form method="POST" action="/predict-linear" enctype="multipart/form-data">
+    <div class="field">
+      <label class="label" for="image">Select Image:</label>
+    <div class="control">
+      <input class="input" type="file" id="image" name="image" required>
+    </div>
+        <p class="help">Supported image formats: JPG, JPEG, PNG</p>
+      </div>
+    
+      <button type="submit" class="button is-primary">Prever Digito </button>
+    </form>
+  
+  {% if prediction_linear %}
+<div id="prediction" class="is-centered has-text-success">
+  <h4>Digito Previsto : {{ prediction_linear }}</h4>
+</div>
+{% else %}
+<div id="prediction" class="is-centered">
+  <p>Nen</p>
+</div>
+{% endif %}
+</div>
+</section>
 </body>
 </html>
